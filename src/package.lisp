@@ -19,4 +19,14 @@
 
    ;; Combinators
    #:.bind
+   #:.let*
+   #:.satisfies
+   #:.is
+   #:.is-not
+
+   ;; Parsers
+   #:.char=
+   #:.digit-char-p
+   #:.lower-case-p
+   #:.upper-case-p
    ))

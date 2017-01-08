@@ -35,6 +35,8 @@
 (fiveam:test item-empty
   (fiveam:is (null (run (.item) ""))))
 
+;;; Combinators
+
 (fiveam:test bind
   (fiveam:is (equal
               (let ((two-chars
@@ -45,6 +47,57 @@
                                        (.return (cons char char2))))))))
                 (run two-chars "foo"))
               (list (cons (cons #\f #\o) "o")))))
+
+(fiveam:test let*
+  ;; same as bind test but with .let* (aka do notation for lisp)
+  (fiveam:is (equal
+              (let ((two-chars
+                     (.let* ((char (.item))
+                             (char2 (.item)))
+                       (.return (cons char char2)))))
+                (run two-chars "foo"))
+              (list (cons (cons #\f #\o) "o")))))
+
+(fiveam:test satisfies
+  (fiveam:is (equal
+              (run (.satisfies #'digit-char-p) "1 and")
+              (list (cons #\1 " and")))))
+
+(fiveam:test is-not
+  (fiveam:is (equal
+              (run (.is-not #'char= #\;) "foo;bar")
+              (list (cons #\f "oo;bar")))))
+
+(fiveam:test is-not-no-parse
+  (fiveam:is (null (run (.is-not #'char= #\;) ";bar"))))
+
+;;; Parsers
+
+(fiveam:test char=
+  (fiveam:is (equal
+              (run (.char= #\x) "xyzzy")
+              (list (cons #\x "yzzy")))))
+
+(fiveam:test digit-char-p
+  (fiveam:is (equal
+              (run (.digit-char-p) "1234")
+              (list (cons #\1 "234")))))
+
+(fiveam:test lower-case-p
+  (fiveam:is (equal
+              (run (.lower-case-p) "abcd")
+              (list (cons #\a "bcd")))))
+
+(fiveam:test lower-case-p-fail
+  (fiveam:is (null (run (.lower-case-p) "Doh!"))))
+
+(fiveam:test upper-case-p
+  (fiveam:is (equal
+              (run (.upper-case-p) "Abcd")
+              (list (cons #\A "bcd")))))
+
+(fiveam:test upper-case-p-fail
+  (fiveam:is (null (run (.upper-case-p) "doh!"))))
 
 (defun run-tests ()
   (princ "Running all comparse unit tests")

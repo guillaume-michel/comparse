@@ -16,7 +16,8 @@
                                      (:file "input-protocol")
                                      (:file "primitives")
                                      (:file "helpers")
-                                     (:file "combinators"))))
+                                     (:file "combinators")
+                                     (:file "parsers"))))
   :in-order-to ((asdf:test-op (asdf:test-op "comparse-tests"))))
 
 (defmethod asdf:perform ((o asdf:test-op)
